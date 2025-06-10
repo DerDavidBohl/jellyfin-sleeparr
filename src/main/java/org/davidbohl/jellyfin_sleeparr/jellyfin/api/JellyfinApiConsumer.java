@@ -1,6 +1,6 @@
-package org.davidbohl.jellyfin_sleeparr;
+package org.davidbohl.jellyfin_sleeparr.jellyfin.api;
 
-import org.davidbohl.jellyfin_sleeparr.jellifin_api_models.*;
+import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

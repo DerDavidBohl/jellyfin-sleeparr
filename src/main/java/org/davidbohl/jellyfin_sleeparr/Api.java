@@ -1,17 +1,15 @@
 package org.davidbohl.jellyfin_sleeparr;
 
-import org.davidbohl.jellyfin_sleeparr.jellifin_api_models.CustomQuery;
-import org.davidbohl.jellyfin_sleeparr.jellifin_api_models.CustomQueryResult;
-import org.davidbohl.jellyfin_sleeparr.jellifin_api_models.Session;
-import org.hibernate.query.sqm.TemporalUnit;
+import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.CustomQuery;
+import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.CustomQueryResult;
+import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.Session;
+import org.davidbohl.jellyfin_sleeparr.jellyfin.api.JellyfinApiConsumer;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 import java.util.List;
 import java.util.Objects;
 

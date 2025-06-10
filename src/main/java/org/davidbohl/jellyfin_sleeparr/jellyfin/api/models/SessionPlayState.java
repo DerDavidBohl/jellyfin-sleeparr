@@ -1,4 +1,4 @@
-package org.davidbohl.jellyfin_sleeparr.jellifin_api_models;
+package org.davidbohl.jellyfin_sleeparr.jellyfin.api.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

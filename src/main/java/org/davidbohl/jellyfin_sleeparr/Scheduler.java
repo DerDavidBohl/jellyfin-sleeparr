@@ -1,9 +1,10 @@
 package org.davidbohl.jellyfin_sleeparr;
 
 import lombok.extern.slf4j.Slf4j;
-import org.davidbohl.jellyfin_sleeparr.jellifin_api_models.CustomQuery;
-import org.davidbohl.jellyfin_sleeparr.jellifin_api_models.CustomQueryResult;
-import org.davidbohl.jellyfin_sleeparr.jellifin_api_models.Session;
+import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.CustomQuery;
+import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.CustomQueryResult;
+import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.Session;
+import org.davidbohl.jellyfin_sleeparr.jellyfin.api.JellyfinApiConsumer;
 import org.davidbohl.jellyfin_sleeparr.repository.SleeparrJellyfinSessionInformation;
 import org.davidbohl.jellyfin_sleeparr.repository.SleeparrJellyfinSessionInformationRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,6 +47,7 @@ public class Scheduler {
                                 Arrays.stream(this.monitoredUserNames).anyMatch(name -> Objects.equals(name, s.getUserName()))
                 )
                 .toList();
+
         Instant minimalTimestamp = Instant.now().minus(6, ChronoUnit.HOURS);
 
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
@@ -59,10 +61,11 @@ public class Scheduler {
 
         for (Session session : monitoredSessionsWithRunningPlayback) {
 
-            String query = String.format("SELECT DateCreated, UserId, ItemId, PlayDuration " +
+            String query = String.format("SELECT DateCreated, UserId, ItemId, PlayDuration, ClientName, DeviceName " +
                     "FROM PlaybackActivity " +
                     "WHERE UserId = '%s' AND DateCreated >= '%s' " +
-                    "ORDER BY ROWID DESC", session.getUserId(), formatter.format(minimalTimestamp));
+                    "ORDER BY ROWID DESC", session.getUserId(), formatter.format(Instant.now().minus(2, ChronoUnit.DAYS)));
+
             CustomQueryResult customQueryResult = this.jellyfinApiConsumer.postCustomQuery(new CustomQuery(query, false));
 
             List<PlaybackActivity> playbackActivities = null;
@@ -73,27 +76,37 @@ public class Scheduler {
                                         Instant.from(formatter.parse(r.getFirst())),
                                         r.get(1),
                                         r.get(2),
-                                        Integer.parseInt(r.get(3))
+                                        Integer.parseInt(r.get(3)),
+                                        r.get(4),
+                                        r.get(5)
                                 )).toList();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
-            List<PlaybackActivity> activitiesOver3minutes = playbackActivities.stream().filter(pa -> pa.getPlayDuration() >= 10).toList();
+            List<PlaybackActivity> relevantPlaybackReporting = playbackActivities.stream().filter(pa ->
+                    pa.getDateCreated().isAfter(Instant.now().minus(6, ChronoUnit.HOURS)) &&
+                    pa.getPlayDuration() >= 10 &&
+                            Objects.equals(pa.getDeviceName(), session.getDeviceName()) &&
+                            Objects.equals(pa.getClientName(), session.getClient())
+            ).toList();
 
-            int secondsWatched = activitiesOver3minutes.stream().mapToInt(PlaybackActivity::getPlayDuration).sum();
+            int secondsWatched = relevantPlaybackReporting.stream().mapToInt(PlaybackActivity::getPlayDuration).sum();
             Duration watchedTime = Duration.ofSeconds(secondsWatched);
 
-            Map<String, List<PlaybackActivity>> groupedByItem = activitiesOver3minutes.stream().collect(
+            Map<String, List<PlaybackActivity>> groupedByItem = relevantPlaybackReporting.stream().collect(
                     Collectors.groupingBy(PlaybackActivity::getItemId)
             );
 
             Optional<SleeparrJellyfinSessionInformation> byId = this.sleeparrJellyfinSessionInformationRepository.findById(session.getId());
 
-            boolean notPausedOrLongAgoPaused = byId.isEmpty() ||
+            boolean notPausedInLast3Hours = byId.isEmpty() ||
                     byId.get().getLastStoppedBySleeparr().isBefore(Instant.now().minus(3, ChronoUnit.HOURS));
 
-            if ( groupedByItem.size() >= 2 && watchedTime.compareTo(maximumInactivity) > 0 && notPausedOrLongAgoPaused) {
+            if ( groupedByItem.size() >= 2 && watchedTime.compareTo(maximumInactivity) > 0 && notPausedInLast3Hours) {
+
+                log.info("Pausing Playback for user '{}' in session '{}'", session.getUserName(), session.getId());
+
                 this.jellyfinApiConsumer.pausePlayback(session.getId());
                 this.jellyfinApiConsumer.sendMessage(session.getId(),
                         "Auto Stop",
