@@ -16,4 +16,6 @@ public class PlaybackActivity {
     private String userId;
     private String itemId;
     private int playDuration;
+    private String clientName;
+    private String deviceName;
 }
