@@ -4,6 +4,11 @@ This App pauses the Playback after some Time to prevent too much progress if you
 
 ## Setup
 
+### Requirements
+
+- Access Token for your Jellyfin API
+- Plugin `Playback Reporting` installed
+
 ### docker-compose
 ```yml
 services:
@@ -23,7 +28,12 @@ services:
       - SLEEPARR_MAXIMUMINACTIVITY=2h
 ```
 
+## Ho it works
+
+
+
 ## Roadmap
 
 - [x] Implement Basic Functionallity
 - [ ] Add a UI for better configuration
+- [ ] Remove Playback Reporting Plugin dependency
