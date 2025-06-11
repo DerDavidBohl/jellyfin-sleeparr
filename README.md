@@ -16,11 +16,6 @@ services:
     image: ghcr.io/derdavidbohl/jellyfin-sleeparr:latest
     container_name: sleeparr
     restart: unless-stopped
-    networks:
-      - internal
-      - local-services
-    depends_on:
-      - jellyfin
     environment:
       - SLEEPARR_JELLYFIN_ENDPOINT=<Your Jellyfin Instance endpoint i. e. http://jellyfin:8096/>
       - SLEEPARR_JELLYFIN_APIKEY=<Your Jellyfin API Key>
@@ -30,7 +25,8 @@ services:
 
 ## Ho it works
 
-
+Sleeparr finds the Playback Reports Data matching to your Session (DeviceName, ClientName, User) and sums the Duration of the content, that was watched more than 10 seconds. 
+If the Duration in the last 6 Hours is greater than the configured maximum inactivity and the user/session watched 2 or more diffrent contents, sleeparr pauses the playback with a message.
 
 ## Roadmap
 
