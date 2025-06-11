@@ -1,6 +1,6 @@
 # Jellyfin-Sleeparr
 
-This Container pauses the Playback after some Time to prevent too much progress if you fell asleep.
+This App pauses the Playback after some Time to prevent too much progress if you fall asleep.
 
 ## Setup
 
