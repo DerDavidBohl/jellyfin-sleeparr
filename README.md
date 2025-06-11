@@ -21,6 +21,4 @@ services:
       - SLEEPARR_JELLYFIN_APIKEY=<Your Jellyfin API Key>
       - SLEEPARR_MONITOREDUSERNAMES=<comma separated List of usernames to monitor>
       - SLEEPARR_MAXIMUMINACTIVITY=2h
-
 ```
-
