@@ -7,7 +7,7 @@ This App pauses the Playback after some Time to prevent too much progress if you
 ### Requirements
 
 - Access Token for your Jellyfin API
-- Plugin `Playback Reporting` installed
+- Plugin `Playback Reporting` installed (Available in Plugin Catalog)
 
 ### docker-compose
 ```yml
