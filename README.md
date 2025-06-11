@@ -22,3 +22,8 @@ services:
       - SLEEPARR_MONITOREDUSERNAMES=<comma separated List of usernames to monitor>
       - SLEEPARR_MAXIMUMINACTIVITY=2h
 ```
+
+## Roadmap
+
+- [x] Implement Basic Functionallity
+- [ ] Add a UI for better configuration
