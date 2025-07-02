@@ -4,7 +4,7 @@ This App pauses the Playback after some Time to prevent too much progress if you
 
 ## Disclaimer
 
-** Jellyfin-Sleeparr is still in development. The usage and API might change in the future! **
+**!! Jellyfin-Sleeparr is still in development. The usage and API might change in the future !!**
 
 ## Setup
 
