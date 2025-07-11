@@ -1,4 +1,4 @@
-package org.davidbohl.jellyfin_sleeparr;
+package org.davidbohl.jellyfin_sleeparr.sleeparr.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

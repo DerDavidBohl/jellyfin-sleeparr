@@ -1,4 +1,4 @@
-package org.davidbohl.jellyfin_sleeparr.repository;
+package org.davidbohl.jellyfin_sleeparr.sleeparr.repository;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,9 +14,9 @@ import java.time.Instant;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SleeparrJellyfinSessionInformation {
+public class SessionPauseTimeStamp {
     @Id
     private String sessionId;
 
-    private Instant lastStoppedBySleeparr;
+    private Instant lastPause;
 }

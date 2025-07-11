@@ -1,9 +1,10 @@
-package org.davidbohl.jellyfin_sleeparr;
+package org.davidbohl.jellyfin_sleeparr.sleeparr.api.v1;
 
+import org.davidbohl.jellyfin_sleeparr.jellyfin.api.JellyfinApiConsumer;
 import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.CustomQuery;
 import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.CustomQueryResult;
 import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.Session;
-import org.davidbohl.jellyfin_sleeparr.jellyfin.api.JellyfinApiConsumer;
+import org.davidbohl.jellyfin_sleeparr.sleeparr.Scheduler;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -14,13 +15,14 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController()
-@RequestMapping("/api/v1")
-public class Api {
+@RequestMapping("/api/v1/debug")
+@Deprecated(forRemoval = true)
+public class DebugApi {
 
     private final JellyfinApiConsumer jellyfinApiConsumer;
     private final Scheduler scheduler;
 
-    public Api(JellyfinApiConsumer jellyfinApiConsumer, Scheduler scheduler) {
+    public DebugApi(JellyfinApiConsumer jellyfinApiConsumer, Scheduler scheduler) {
         this.jellyfinApiConsumer = jellyfinApiConsumer;
         this.scheduler = scheduler;
     }
