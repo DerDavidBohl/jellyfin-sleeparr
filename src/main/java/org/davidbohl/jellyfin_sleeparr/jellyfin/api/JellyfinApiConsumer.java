@@ -1,8 +1,6 @@
 package org.davidbohl.jellyfin_sleeparr.jellyfin.api;
 
-import jakarta.servlet.http.HttpSession;
 import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.*;
-import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,25 +22,13 @@ public class JellyfinApiConsumer {
     @Value("${sleeparr.jellyfin.apiKey}")
     private String apiKey;
 
-    private final ObjectFactory<HttpSession> httpSessionFactory;
-
-
-    public JellyfinApiConsumer(RestTemplate restTemplate, ObjectFactory<HttpSession> httpSessionFactory) {
+    public JellyfinApiConsumer(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.httpSessionFactory = httpSessionFactory;
     }
 
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
-//        String deviceId = UUID.randomUUID().toString();
-//
-//        try {
-//            deviceId = httpSessionFactory.getObject().getId();
-//        } catch (Throwable e) {
-//            // ignore... i tried so hard and got so far
-//        }
 
         headers.set("Authorization", "MediaBrowser Token=\"%s\", Client=\"sleeparr\", Version=\"0.0.1\", DeviceId=\"sleeparr\", Device=\"sleeparr\""
                 .formatted(apiKey));
