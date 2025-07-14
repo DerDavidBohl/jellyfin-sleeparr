@@ -23,8 +23,10 @@ services:
     environment:
       - SLEEPARR_JELLYFIN_ENDPOINT=<Your Jellyfin Instance endpoint i. e. http://jellyfin:8096/>
       - SLEEPARR_JELLYFIN_APIKEY=<Your Jellyfin API Key>
-      - SLEEPARR_MONITOREDUSERNAMES=<comma separated List of usernames to monitor>
-      - SLEEPARR_MAXIMUMINACTIVITY=2h
+      - SLEEPARR_JWT_SECRET= # Your Secret. Can be generated with: openssl rand -base64 32
+      - SLEEPARR_DEFAULT_WATCH_DURATION= # Optional, Duration String. Default duration for auto pause. If not set: 3h
+      - SLEEPARR_DEFAULT_DIFFERENT_ITEMS= # Optional, Number. Default number of different items for auto pause. If not set: 3
+      - SLEEPARR_DEFAULT_ENABLED= # Optional, Boolean. Indicates if auto pause enabled by default. If not set: true
 ```
 
 ## Ho it works
