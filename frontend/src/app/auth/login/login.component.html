@@ -1,0 +1,12 @@
+<mat-card class="p-4 space-y-4">
+  <h3 class="text-2xl">Login to Sleep<strong>arr</strong></h3>
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input type="username" [(ngModel)]="username" matInput>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input type="password" [(ngModel)]="password" matInput>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="login()">Login</button>
+</mat-card>

@@ -18,11 +18,11 @@ public class JwtService {
     @Value("${sleeparr.jwtSecret}")
     private String jwtSecret;
 
-    public String generateToken(String subject) {
+    public String generateToken(String subject, Date expiration) {
         return Jwts.builder()
                 .subject(subject)
                 .issuedAt(new Date())
-                .expiration(new Date(new Date().getTime() + Duration.ofDays(3).toMillis()))
+                .expiration(expiration)
                 .signWith(getSigningKey())
                 .compact();
     }

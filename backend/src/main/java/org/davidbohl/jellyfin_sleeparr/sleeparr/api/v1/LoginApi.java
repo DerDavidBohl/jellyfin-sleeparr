@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api/v1/login")
 public class LoginApi {
@@ -25,8 +29,10 @@ public class LoginApi {
     public AuthResponse login(@RequestBody AuthRequest authRequest) {
         AuthenticationResponse authenticationResponse = this.jellyfinApiConsumer.authenticate(authRequest.username(), authRequest.password());
 
-        String jwt = jwtService.generateToken(authenticationResponse.getUser().getId());
-        return new AuthResponse(jwt);
+        Date expiration = new Date(new Date().getTime() + Duration.ofDays(1).toMillis());
+
+        String jwt = jwtService.generateToken(authenticationResponse.getUser().getId(), expiration);
+        return new AuthResponse(jwt, expiration.toInstant());
     }
 
 }
