@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthResponse} from './auth-request';
 import {map, tap} from 'rxjs';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 const jwtLocalStorageId: string = 'jwt';
 const expiresAtStorageId = 'expires_at';
@@ -11,7 +13,9 @@ const expiresAtStorageId = 'expires_at';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) {
+  private _snackBar = inject(MatSnackBar);
+
+  constructor(private http: HttpClient, private router: Router) {
 
   }
 
@@ -27,10 +31,6 @@ export class AuthService {
   }
 
   private setSession(authResponse: AuthResponse) {
-
-    console.log(authResponse);
-    console.log(jwtLocalStorageId);
-    console.log(expiresAtStorageId);
     localStorage.setItem(jwtLocalStorageId, authResponse.jwt);
     localStorage.setItem(expiresAtStorageId, authResponse.expirationDate.toISOString());
   }
@@ -38,18 +38,16 @@ export class AuthService {
   logout() {
     localStorage.removeItem(jwtLocalStorageId);
     localStorage.removeItem(expiresAtStorageId);
+
+    this._snackBar.open('Logged out', undefined, {duration: 2000});
+    this.router.navigate(['/login']).then();
+
   }
 
   public isLoggedIn(): boolean {
 
     const expiration = this.getExpiration();
-    const isLoggedIn = !!expiration && !!this.getToken() && expiration.getTime() > new Date().getTime();
-    console.log(isLoggedIn);
-    return isLoggedIn;
-  }
-
-  isLoggedOut() {
-    return !this.isLoggedIn();
+    return !!expiration && !!this.getToken() && expiration.getTime() > new Date().getTime();
   }
 
   getExpiration(): Date | null {
