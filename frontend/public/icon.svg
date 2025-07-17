@@ -1,0 +1,16 @@
+<svg width="220" height="300" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background circle -->
+  <circle cx="110" cy="150" r="90" fill="#2E3A59" stroke="#A45DB7" stroke-width="4"/>
+
+  <!-- Mini play button in purple, now centered in the circle -->
+  <polygon points="100,135 130,150 100,165" fill="#A45DB7"/>
+
+  <!-- Closed eyes in purple, adjusted to not overlap with the new polygon position -->
+  <rect x="65" y="110" width="25" height="5" rx="2.5" fill="#A45DB7"/>
+  <rect x="130" y="110" width="25" height="5" rx="2.5" fill="#A45DB7"/>
+
+  <!-- Comic "ZZZ" (scaling upward) -->
+  <text x="150" y="50" text-anchor="middle" font-family="Arial" font-size="20" fill="#A45DB7" font-weight="bold">Z</text>
+  <text x="170" y="28" text-anchor="middle" font-family="Arial" font-size="28" fill="#A45DB7" font-weight="bold">Z</text>
+  <text x="190" y="0" text-anchor="middle" font-family="Arial" font-size="36" fill="#A45DB7" font-weight="bold">Z</text>
+</svg>

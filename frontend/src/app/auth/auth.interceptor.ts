@@ -16,12 +16,12 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   });
 
   return next(clone).pipe(
-    catchError((err, caught) =>
+    catchError((err) =>
       {
         if(err.status === 401) {
           authService.logout();
         }
-        return caught;
+        throw err;
       }
     )
   );

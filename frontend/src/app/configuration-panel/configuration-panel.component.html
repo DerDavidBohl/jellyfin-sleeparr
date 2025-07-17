@@ -1,7 +1,7 @@
-<mat-card class="p-4 pr-8 space-y-4">
-
+<mat-card class="p-4 pr-8 space-y-4 relative">
   @if ($me) {
-    <div class="flex items-center">
+    <!-- Top Right Corner button -->
+    <div class="absolute top-4 right-4">
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
         <mat-icon>person</mat-icon>
       </button>
@@ -11,14 +11,17 @@
           <span>Logout</span>
         </button>
       </mat-menu>
-      <h3 class="text-xl ml-2 mt-2">Hello
+    </div>
+
+
+    <h3 class="text-2xl mt-4">Hello
         {{ ($me | async)?.username }}
       </h3>
-    </div>
+
 
     <div class="w-full">
       <h3 class="text-xl">Configuration:</h3>
-     @let config = $autoPauseConfiguration | async;
+      @let config = $autoPauseConfiguration | async;
 
       @if (config) {
         <div>
@@ -26,7 +29,8 @@
         </div>
 
         <h4 class="text-l">Time watched for auto pause:</h4>
-        <app-duration-picker-component [(isoDurationString)]="config.watchDuration" (isoDurationStringChange)="console.log($event)">
+        <app-duration-picker-component [(isoDurationString)]="config.watchDuration"
+                                       (isoDurationStringChange)="console.log($event)">
 
         </app-duration-picker-component>
 
