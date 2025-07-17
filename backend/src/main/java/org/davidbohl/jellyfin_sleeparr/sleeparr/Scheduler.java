@@ -127,10 +127,5 @@ public class Scheduler {
         }
     }
 
-    private boolean isAutoPauseConfigurationCriteriaMet(AutoPauseConfiguration apc, int diffrentItemCount, Duration watchedDuration) {
-        return apc.isEnabled() &&
-                diffrentItemCount >= apc.getDifferentItems() &&
-                watchedDuration.compareTo(apc.getWatchDuration()) > 0;
-    }
 }
 
