@@ -11,13 +11,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AutoPauseConfigurationRepositoryImpl implements CustomAutoPauseConfigurationRepository {
 
-    @Value("${sleeparr.defaultWatchDuration:3h}")
+    @Value("${sleeparr.defaults.watchDuration:3h}")
     private Duration defaultWatchDuration;
 
-    @Value("${sleeparr.defaultDifferentItems:3}")
+    @Value("${sleeparr.defaults.differentItems:3}")
     private int defaultDifferentItems;
 
-    @Value("${sleeparr.defaultEnabled:true}")
+    @Value("${sleeparr.defaults.enabled:true}")
     private boolean defaultEnabled;
 
     @Lazy
