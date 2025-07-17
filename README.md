@@ -20,6 +20,8 @@ services:
     image: ghcr.io/derdavidbohl/jellyfin-sleeparr:latest
     container_name: sleeparr
     restart: unless-stopped
+    volumes:
+      - /path/to/your/data:/app/data
     environment:
       - SLEEPARR_JELLYFIN_ENDPOINT=<Your Jellyfin Instance endpoint i. e. http://jellyfin:8096/>
       - SLEEPARR_JELLYFIN_APIKEY=<Your Jellyfin API Key>
