@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class Scheduler {
 
+    public static final int MINIMUM_PLAY_DURATION_IN_SECONDS = 10;
+    public static final int RELEVENT_PLAYBACK_TIMESPAN_IN_HOURS_IN_PAST = 6;
     private final JellyfinApiConsumer jellyfinApiConsumer;
     private final SessionPauseTimeStampRepository sessionPauseTimeStampRepository;
     private final AutoPauseConfigurationRepository autoPauseConfigurationRepository;
@@ -82,8 +84,8 @@ public class Scheduler {
 
 
             List<PlaybackActivity> relevantPlaybackActivities = playbackActivities.stream().filter(pa ->
-                    pa.getDateCreated().isAfter(Instant.now().minus(6, ChronoUnit.HOURS)) &&
-                            pa.getPlayDuration() >= 10 &&
+                    pa.getDateCreated().isAfter(Instant.now().minus(RELEVENT_PLAYBACK_TIMESPAN_IN_HOURS_IN_PAST, ChronoUnit.HOURS)) &&
+                            pa.getPlayDuration() >= MINIMUM_PLAY_DURATION_IN_SECONDS &&
                             Objects.equals(pa.getDeviceName(), session.getDeviceName()) &&
                             Objects.equals(pa.getClientName(), session.getClient())
             ).toList();
