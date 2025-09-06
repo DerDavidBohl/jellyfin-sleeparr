@@ -1,5 +1,5 @@
 # Use Maven image to build the application
-FROM maven:3.9.9 AS build
+FROM maven:3.9.11 AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
