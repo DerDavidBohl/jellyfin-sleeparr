@@ -6,7 +6,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Use OpenJDK image to run the application
-FROM openjdk:23-jdk-slim-bullseye
+FROM openjdk:25-jdk-slim-bullseye
 
 # Finish
 WORKDIR /app
