@@ -14,9 +14,17 @@ import java.time.Instant;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SessionPauseTimeStamp {
+public class SessionActivity {
+
     @Id
     private String sessionId;
 
-    private Instant lastPause;
+    private Instant lastActivity;
+
+    private String currentItemId;
+
+    private int itemsWatched;
+
 }
+
+

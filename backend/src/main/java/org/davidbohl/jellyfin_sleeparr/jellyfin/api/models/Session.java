@@ -35,4 +35,7 @@ public class Session {
 
     @JsonProperty("DeviceName")
     private String deviceName;
+
+    @JsonProperty("DeviceId")
+    private String deviceId;
 }

@@ -4,7 +4,6 @@ import org.davidbohl.jellyfin_sleeparr.jellyfin.api.JellyfinApiConsumer;
 import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.CustomQuery;
 import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.CustomQueryResult;
 import org.davidbohl.jellyfin_sleeparr.jellyfin.api.models.Session;
-import org.davidbohl.jellyfin_sleeparr.sleeparr.Scheduler;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -20,17 +19,11 @@ import java.util.Objects;
 public class DebugApi {
 
     private final JellyfinApiConsumer jellyfinApiConsumer;
-    private final Scheduler scheduler;
 
-    public DebugApi(JellyfinApiConsumer jellyfinApiConsumer, Scheduler scheduler) {
+    public DebugApi(JellyfinApiConsumer jellyfinApiConsumer) {
         this.jellyfinApiConsumer = jellyfinApiConsumer;
-        this.scheduler = scheduler;
     }
 
-    @PostMapping("/stop-inactive")
-    public void postStopInactive() {
-        this.scheduler.checkInactiveSessions();
-    }
 
     @GetMapping("/sessions")
     public List<Session> getSessions() {

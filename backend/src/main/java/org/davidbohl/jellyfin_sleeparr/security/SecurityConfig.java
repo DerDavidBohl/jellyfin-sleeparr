@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(expressionInterceptUrlRegistry ->
                         expressionInterceptUrlRegistry
                                 .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/webhook").permitAll()
                                 .requestMatchers("/api/**").authenticated()
                                 .anyRequest().permitAll()
 
