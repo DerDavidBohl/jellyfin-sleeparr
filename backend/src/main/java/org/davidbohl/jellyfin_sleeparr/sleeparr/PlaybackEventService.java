@@ -49,6 +49,7 @@ public class PlaybackEventService {
                         "Your Playback was paused because Sleeparr thinks you are sleeping.",
                         Duration.ofMinutes(1).toMillis());
                 sessionActivity.setLastActivity(Instant.now());
+                sessionActivity.setItemsWatched(0);
                 this.sessionActivityRepository.saveAndFlush(sessionActivity);
             }
 
