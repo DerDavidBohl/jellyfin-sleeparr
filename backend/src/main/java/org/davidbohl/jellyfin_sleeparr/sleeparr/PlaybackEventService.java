@@ -25,6 +25,8 @@ public class PlaybackEventService {
 
     public void reactToUserEvent(String userId, String deviceId, String itemId, boolean isAutomated) {
         try {
+            userId = userId.replace("-", "");
+
             AutoPauseConfiguration configuration = autoPauseConfigurationRepository.findOrCreateById(userId);
 
             if (!configuration.isEnabled())
