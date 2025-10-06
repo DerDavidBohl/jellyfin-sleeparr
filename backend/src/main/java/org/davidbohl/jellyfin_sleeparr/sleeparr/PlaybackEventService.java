@@ -27,6 +27,8 @@ public class PlaybackEventService {
         try {
             userId = userId.replace("-", "");
 
+            log.info("Got event: IsAutomated <{}> User <{}> Device <{}> itemId <{}>", isAutomated, userId, deviceId, itemId);
+
             AutoPauseConfiguration configuration = autoPauseConfigurationRepository.findOrCreateById(userId);
 
             if (!configuration.isEnabled())
