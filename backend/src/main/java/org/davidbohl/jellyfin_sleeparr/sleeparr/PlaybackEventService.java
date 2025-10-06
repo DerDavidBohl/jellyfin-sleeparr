@@ -25,11 +25,15 @@ public class PlaybackEventService {
 
     public void reactToUserEvent(String userId, String deviceId, String itemId, boolean isAutomated) {
         try {
+            AutoPauseConfiguration configuration = autoPauseConfigurationRepository.findOrCreateById(userId);
+
+            if (!configuration.isEnabled())
+                return;
+
             Session session = identifySession(userId, deviceId);
 
             SessionActivity sessionActivity = updateSessionActivity(session, itemId, isAutomated);
 
-            AutoPauseConfiguration configuration = autoPauseConfigurationRepository.findOrCreateById(userId);
 
             if (sessionActivity.getLastActivity()
                     .plus(configuration.getWatchDuration())
