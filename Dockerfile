@@ -1,15 +1,27 @@
-# Use Maven image to build the application
-FROM maven:3.9.11 AS build
+FROM node:alpine AS frontend-build
 WORKDIR /app
-COPY pom.xml .
-COPY src ./src
+COPY frontend .
+RUN rm -rf package-lock.json
+RUN npm cache clean --force
+RUN npm install
+RUN npm run build
+
+# Use Maven image to build the application
+FROM maven:3.9.10 AS backend-build
+WORKDIR /app
+COPY backend/pom.xml .
+COPY backend/src ./src
+COPY --from=frontend-build /app/dist/browser ./src/main/resources/static
 RUN mvn clean package -DskipTests
 
 # Use OpenJDK image to run the application
 FROM openjdk:23-jdk-slim-bullseye
 
+# Install Docker
+RUN apt-get update && apt-get upgrade -y
+
 # Finish
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=backend-build /app/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=production"]

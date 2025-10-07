@@ -1,0 +1,25 @@
+<mat-card>
+  <div class="p-4 space-x-5 grid grid-cols-2">
+
+    <div class="col-span-1">
+      <img src="icon.svg" alt="logo">
+    </div>
+
+    <div class="col-span-1 space-y-4">
+      <h3 class="text-2xl">
+        Login to Sleep<strong>arr</strong>
+      </h3>
+      <div class="grid">
+        <mat-form-field>
+          <mat-label>Username</mat-label>
+          <input type="username" (keyup.enter)="passwordInput.focus()" [(ngModel)]="username" matInput>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input type="password" [(ngModel)]="password" (keyup.enter)="login()" #passwordInput matInput>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="login()">Login</button>
+      </div>
+    </div>
+  </div>
+</mat-card>

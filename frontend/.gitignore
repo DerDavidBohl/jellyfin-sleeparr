@@ -1,29 +1,10 @@
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
-### IntelliJ IDEA ###
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
 
 # Node
 /node_modules
@@ -32,6 +13,8 @@ yarn-error.log
 
 # IDEs and editors
 .idea/
+.project
+.classpath
 .c9/
 *.launch
 .settings/
@@ -57,8 +40,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-
-
-.idea
-.vscode
-data
