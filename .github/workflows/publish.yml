@@ -1,0 +1,72 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (z.B. 1.2.3)'
+        required: true
+
+jobs:
+  update-and-tag:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Tags werden benötigt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+
+      - name: Update pom.xml version
+        working-directory: ./backend
+        run: mvn versions:set -DnewVersion=${{ github.event.inputs.version }}
+
+      - name: Update package.json version
+        working-directory: ./frontend
+        run: npm version ${{ github.event.inputs.version }} --no-git-tag-version
+
+      - name: Install npm dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Import GPG key
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          git config --global user.signingkey "$GPG_KEY_ID"
+          git config --global commit.gpgsign true
+          git config --global user.name "David Bohl"
+          git config --global user.email "david@davidbohl.org"
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+
+      - name: Commit and push changes
+        run: |
+          git add ./backend/pom.xml ./frontend/package.json ./frontend/package-lock.json
+          git commit -S -m "Bump version to ${{ github.event.inputs.version }}"
+          git tag -s v${{ github.event.inputs.version }} -m "Release v${{ github.event.inputs.version }}"
+          git push https://x-access-token:${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git HEAD:${GITHUB_REF_NAME}
+          # Tag pushen
+          git push https://x-access-token:${GH_PAT}@github.com/${GITHUB_REPOSITORY}.git v${{ github.event.inputs.version }}
+        env:
+          GH_PAT: ${{ secrets.PUSH_PAT }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+      - name: Trigger Docker build via repository_dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PUSH_PAT }}
+          event-type: tag-created
+          client-payload: '{"tag": "v${{ github.event.inputs.version }}"}'
