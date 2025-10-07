@@ -23,11 +23,11 @@ public class PlaybackEventService {
     private final JellyfinApiConsumer jellyfinApiConsumer;
     private final AutoPauseConfigurationRepository autoPauseConfigurationRepository;
 
-    public void reactToUserEvent(String userId, String deviceId, String itemId, boolean isAutomated) {
+    public void reactToUserEvent(String userId, String deviceId, String itemId, boolean isPaused) {
         try {
             userId = userId.replace("-", "");
 
-            log.info("Got event: IsAutomated <{}> User <{}> Device <{}> itemId <{}>", isAutomated, userId, deviceId, itemId);
+            log.info("Got event: IsPaused <{}> User <{}> Device <{}> itemId <{}>", isPaused, userId, deviceId, itemId);
 
             AutoPauseConfiguration configuration = autoPauseConfigurationRepository.findOrCreateById(userId);
 
@@ -36,7 +36,7 @@ public class PlaybackEventService {
 
             Session session = identifySession(userId, deviceId);
 
-            SessionActivity sessionActivity = updateSessionActivity(session, itemId, isAutomated);
+            SessionActivity sessionActivity = updateSessionActivity(session, itemId, isPaused);
 
 
             if (sessionActivity.getLastActivity()
@@ -60,18 +60,18 @@ public class PlaybackEventService {
         }
     }
 
-    private SessionActivity updateSessionActivity(Session session, String itemId, boolean isAutomated) {
+    private SessionActivity updateSessionActivity(Session session, String itemId, boolean isPaused) {
         SessionActivity sessionActivity = sessionActivityRepository.findById(session.getId()).orElse(new SessionActivity(session.getId(), Instant.now(), itemId, 0));
 
-        if (isAutomated && sessionActivity.getSessionId().equals(itemId))
+        if (!isPaused && sessionActivity.getSessionId().equals(itemId))
             return sessionActivity;
 
-        if (!isAutomated && !sessionActivity.getCurrentItemId().equals(itemId)) {
+        if (isPaused && !sessionActivity.getCurrentItemId().equals(itemId)) {
             sessionActivity.setCurrentItemId(itemId);
             sessionActivity.setItemsWatched(sessionActivity.getItemsWatched() + 1);
         }
 
-        if (!isAutomated && sessionActivity.getCurrentItemId().equals(itemId))
+        if (isPaused && sessionActivity.getCurrentItemId().equals(itemId))
             sessionActivity.setLastActivity(Instant.now());
 
         return sessionActivityRepository.saveAndFlush(sessionActivity);

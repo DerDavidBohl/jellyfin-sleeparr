@@ -17,7 +17,7 @@ public class WebhookApi {
 
     @PostMapping
     public void post(@RequestBody PlayBackEvent playBackEvent) {
-        playbackEventService.reactToUserEvent(playBackEvent.userId(), playBackEvent.deviceId(), playBackEvent.itemId(), playBackEvent.isAutomated().equals("True"));
+        playbackEventService.reactToUserEvent(playBackEvent.userId(), playBackEvent.deviceId(), playBackEvent.itemId(), playBackEvent.isPaused().equals("True"));
     }
 
 }
