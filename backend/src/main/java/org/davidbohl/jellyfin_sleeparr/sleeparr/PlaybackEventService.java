@@ -39,24 +39,28 @@ public class PlaybackEventService {
             SessionActivity sessionActivity = updateSessionActivity(session, itemId, isPaused);
 
 
-            if (sessionActivity.getLastActivity()
-                    .plus(configuration.getWatchDuration())
-                    .isBefore(Instant.now()) &&
-                    sessionActivity.getItemsWatched() >= configuration.getDifferentItems()) {
-
-                log.info("Pausing Playback for user '{}' in session '{}'", session.getUserName(), session.getId());
-                this.jellyfinApiConsumer.pausePlayback(session.getId());
-                this.jellyfinApiConsumer.sendMessage(session.getId(),
-                        "Auto Stop",
-                        "Your Playback was paused because Sleeparr thinks you are sleeping.",
-                        Duration.ofMinutes(1).toMillis());
-                sessionActivity.setLastActivity(Instant.now());
-                sessionActivity.setItemsWatched(0);
-                this.sessionActivityRepository.saveAndFlush(sessionActivity);
-            }
+            pauseSessionIfInactive(configuration, session, sessionActivity);
 
         } catch (UnidentifiableSession e) {
             log.warn("Could not Identify Session", e);
+        }
+    }
+
+    private void pauseSessionIfInactive(AutoPauseConfiguration configuration, Session session, SessionActivity sessionActivity) {
+        if (sessionActivity.getLastActivity()
+                .plus(configuration.getWatchDuration())
+                .isBefore(Instant.now()) &&
+                sessionActivity.getItemsWatched() >= configuration.getDifferentItems()) {
+
+            log.info("Pausing Playback for user '{}' in session '{}'", session.getUserName(), session.getId());
+            this.jellyfinApiConsumer.pausePlayback(session.getId());
+            this.jellyfinApiConsumer.sendMessage(session.getId(),
+                    "Auto Stop",
+                    "Your Playback was paused because Sleeparr thinks you are sleeping.",
+                    Duration.ofMinutes(1).toMillis());
+            sessionActivity.setLastActivity(Instant.now());
+            sessionActivity.setItemsWatched(0);
+            this.sessionActivityRepository.saveAndFlush(sessionActivity);
         }
     }
 
