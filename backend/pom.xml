@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.davidbohl</groupId>
 	<artifactId>jellyfin-sleeparr</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>jellyfin-sleeparr</name>
 	<description>Sleep Mode for Jellyfin</description>
 	<url/>
