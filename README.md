@@ -11,7 +11,7 @@ This App pauses the Playback after some Time to prevent too much progress if you
 ### Requirements
 
 - Access Token for your Jellyfin API
-- Plugin `Playback Reporting` installed (Available in Plugin Catalog)
+w- Plugin `Webhook` installed (Available in Plugin Catalog)
 
 ### docker-compose
 ```yml
@@ -31,10 +31,35 @@ services:
       - SLEEPARR_DEFAULTS_ENABLED= # Optional, Boolean. Indicates if auto pause enabled by default. If not set: true
 ```
 
+
+### Add Webhook
+
+- Goto Jellyfin Settings
+- Click "My  Plugins"
+- Go to Webhook Settings
+- Click "Add Generic Destination"
+- Choose a Webhook Name
+- Set the URL to `<Your Spleeparr Host and Port>/api/v1/webhook`
+- Status `Enable`
+- Notification Type: Playback Progress
+- Item Type: `Movies`, `Episodes`, `Season`, `Series`
+- Template:
+```json
+{
+"notificationType": "{{NotificationType}}",
+"userId": "{{UserId}}",
+"deviceId": "{{DeviceId}}",
+"isPaused": "{{IsPaused}}",
+"itemId": "{{ItemId}}"
+}
+```
+- Save
+
+Now sleeparr will be informed whenever a user plays a item from your library.
+
 ## Ho it works
 
-Sleeparr finds the Playback Reports Data matching to your Session (DeviceName, ClientName, User) and sums the Duration of the content, that was watched more than 10 seconds. 
-If the Duration in the last 6 Hours is greater than the configured maximum inactivity and the user/session watched 2 or more diffrent contents, sleeparr pauses the playback with a message.
+When a user pauses the playback,
 
 ## Roadmap
 
