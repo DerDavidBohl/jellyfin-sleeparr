@@ -17,9 +17,6 @@ RUN mvn clean package -DskipTests
 # Use OpenJDK image to run the application
 FROM eclipse-temurin:21-alpine
 
-# Install Docker
-RUN apt-get update && apt-get upgrade -y
-
 # Finish
 WORKDIR /app
 COPY --from=backend-build /app/target/*.jar app.jar
