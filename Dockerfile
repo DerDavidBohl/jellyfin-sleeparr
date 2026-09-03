@@ -15,7 +15,7 @@ COPY --from=frontend-build /app/dist/browser ./src/main/resources/static
 RUN mvn clean package -DskipTests
 
 # Use OpenJDK image to run the application
-FROM eclipse-temurin:21-alpine
+FROM eclipse-temurin:25-alpine
 
 # Finish
 WORKDIR /app
